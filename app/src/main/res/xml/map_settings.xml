@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="View Options">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref4"
+            android:title="Show 4 / X4" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref17"
+            android:title="Show 17" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref2"
+            android:title="Show 2 and 2a" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="fss"
+            android:title="Show 5,6 and 7" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref33"
+            android:title="Show 33 / 33a" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="preforange"
+            android:title="Show 12,13,14 19a,19b and 19c" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="prefnotinservice"
+            android:title="Show buses not in service" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="prefothers"
+            android:title="Show all other" />
+    </PreferenceCategory>
+</PreferenceScreen>
