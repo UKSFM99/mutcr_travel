@@ -143,6 +143,7 @@ public class app_http extends AsyncTask<String, String, String> {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                fallback();
             }
         }
         return null;
@@ -159,5 +160,6 @@ public class app_http extends AsyncTask<String, String, String> {
         }
         SharedPreferences prefs = mContext.getSharedPreferences(mContext.getPackageName() + "_preferences", Context.MODE_PRIVATE);
         int i = new app_maps().decode_marker(prefs,googleMap);
+
     }
 }

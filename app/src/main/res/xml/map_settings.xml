@@ -3,35 +3,87 @@
     <PreferenceCategory android:title="View Options">
         <SwitchPreference
             android:defaultValue="true"
+            android:key="pref2"
+            android:title="Show 2 and 2a" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref3"
+            android:title="Show 3" />
+        <SwitchPreference
+            android:defaultValue="true"
             android:key="pref4"
             android:title="Show 4 / X4" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref5"
+            android:title="Show 5" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref6"
+            android:title="Show 6 and 6a" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref7"
+            android:title="Show 7" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref9"
+            android:title="Show 9" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref11"
+            android:title="Show 11" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref12"
+            android:title="Show 12" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref13"
+            android:title="Show 13" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref14"
+            android:title="Show 14" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref15"
+            android:title="Show 15" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref16"
+            android:title="Show 16" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="pref17"
             android:title="Show 17" />
         <SwitchPreference
             android:defaultValue="true"
-            android:key="pref2"
-            android:title="Show 2 and 2a" />
+            android:key="pref19"
+            android:title="Show 19a, 19b and 19c" />
         <SwitchPreference
             android:defaultValue="true"
-            android:key="fss"
-            android:title="Show 5,6 and 7" />
+            android:key="pref21"
+            android:title="Show 21" />
         <SwitchPreference
             android:defaultValue="true"
-            android:key="pref33"
-            android:title="Show 33 / 33a" />
+            android:key="pref22"
+            android:title="Show 22" />
         <SwitchPreference
             android:defaultValue="true"
-            android:key="preforange"
-            android:title="Show 12,13,14 19a,19b and 19c" />
+            android:key="pref23"
+            android:title="Show 23" />
         <SwitchPreference
             android:defaultValue="true"
-            android:key="prefnotinservice"
-            android:title="Show buses not in service" />
+            android:key="pref24"
+            android:title="Show 24" />
         <SwitchPreference
             android:defaultValue="true"
-            android:key="prefothers"
-            android:title="Show all other" />
+            android:key="pref25"
+            android:title="Show 25" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref26"
+            android:title="Show 26" />
     </PreferenceCategory>
 </PreferenceScreen>
