@@ -81,10 +81,8 @@ public class app_maps extends Fragment {
         mContext = getContext();
         if (timer == null) {
             update_map_auto();
+            System.out.println("starting timer");
         }
-        progress = new ProgressDialog(getContext());
-        progress.setMessage("Downloading, please wait");
-        progress.show();
         myView = inflater.inflate(R.layout.app_maps, container, false);
         mMapView = (MapView) myView.findViewById(map);
         mMapView.onCreate(savedInstanceState);
@@ -115,11 +113,11 @@ public class app_maps extends Fragment {
 
     public int decode_marker(SharedPreferences prefs, GoogleMap gmap) {
         builder = new LatLngBounds.Builder();
-        boolean four = prefs.getBoolean("pref4", true);
+        boolean others = prefs.getBoolean("prefothers", true);
+        boolean one = prefs.getBoolean("pref1", true);
         boolean two = prefs.getBoolean("pref2", true);
-        boolean seventeen = prefs.getBoolean("pref17", true);
-        boolean thirty3 = prefs.getBoolean("pref33", true);
         boolean three = prefs.getBoolean("pref3", true);
+        boolean four = prefs.getBoolean("pref4", true);
         boolean five = prefs.getBoolean("pref5", true);
         boolean six = prefs.getBoolean("pref6", true);
         boolean seven = prefs.getBoolean("pref7", true);
@@ -130,6 +128,7 @@ public class app_maps extends Fragment {
         boolean fourteen = prefs.getBoolean("pref14", true);
         boolean fifteen = prefs.getBoolean("pref15", true);
         boolean sixteen = prefs.getBoolean("pref16", true);
+        boolean seventeen = prefs.getBoolean("pref17", true);
         boolean nineteen = prefs.getBoolean("pref19", true);
         boolean twentyone = prefs.getBoolean("pref21", true);
         boolean twentytwo = prefs.getBoolean("pref22", true);
@@ -137,6 +136,15 @@ public class app_maps extends Fragment {
         boolean twentyfour = prefs.getBoolean("pref24", true);
         boolean twentyfive = prefs.getBoolean("pref25", true);
         boolean twentysix = prefs.getBoolean("pref26", true);
+        boolean twentyseven = prefs.getBoolean("pref27", true);
+        boolean twentyeight = prefs.getBoolean("pref28", true);
+        boolean twentynine = prefs.getBoolean("pref29", true);
+        boolean thirtythree = prefs.getBoolean("pref33", true);
+        boolean fifty = prefs.getBoolean("pref50", true);
+        boolean fiftythree = prefs.getBoolean("pref53", true);
+        boolean sixtey = prefs.getBoolean("pref60", true);
+        boolean fivehundred = prefs.getBoolean("pref500", true);
+        boolean notinservice = prefs.getBoolean("prefnis", true);
         marker_ids.clear();
         String line = "";
         int markerid = 0;
@@ -145,7 +153,11 @@ public class app_maps extends Fragment {
             for (int i = 0; i < BusID.size(); i++) {
                 String colour;
                 colour = "#ffffff";
-                if (four && (service.get(i).contains("X4") || service.get(i).equals("4"))) {
+                if (one && (service.get(i).equals("1"))) {
+                    colour = "#000000";
+                    markerid = 1;
+                }
+                else if (four && (service.get(i).contains("X4") || service.get(i).equals("4"))) {
                     colour = "#D6AE6E";
                     markerid = 4;
                 } else if (seventeen && service.get(i).contains("17")) {
@@ -154,9 +166,6 @@ public class app_maps extends Fragment {
                 } else if (two && (service.get(i).equals("2") || service.get(i).equals("2a"))) {
                     colour = "#6FCC58";
                     markerid = 2;
-                } else if (thirty3 && (service.get(i).equals("33") || service.get(i).equals("33a"))) {
-                    colour = "#143681";
-                    markerid = 33;
                 } else if (three && (service.get(i).equals("3"))) {
                     colour = "#FEBD31";
                     markerid = 3;
@@ -211,20 +220,50 @@ public class app_maps extends Fragment {
                 } else if (twentysix && (service.get(i).equals("26"))) {
                     colour = "#FDCD1E";
                     markerid = 26;
-                } else {
+                } else if (twentyseven && (service.get(i).equals("27"))) {
+                    colour = "#AF2673";
+                    markerid = 27;
+                } else if (twentyeight && (service.get(i).equals("28"))) {
+                    colour = "#45A433";
+                    markerid = 28;
+                } else if (twentynine && (service.get(i).equals("29"))) {
+                    colour = "#AF2673";
+                    markerid = 29;
+                } else if (thirtythree && (service.get(i).equals("33")||service.get(i).equals("33a"))) {
+                    colour = "#032470";
+                    markerid = 33;
+                } else if (fifty && (service.get(i).equals("50a")||service.get(i).equals("50"))) {
+                    colour = "#032470";
+                    markerid = 50;
+                } else if (fiftythree && (service.get(i).equals("53a")||service.get(i).equals("53"))) {
+                    colour = "#044040";
+                    markerid = 53;
+                } else if (sixtey && (service.get(i).equals("60c")||service.get(i).equals("60m")||service.get(i).equals("60"))) {
+                    colour = "#044040";
+                    markerid = 60;
+                } else if (fivehundred && (service.get(i).equals("500")||service.get(i).equals("500a"))) {
+                    colour = "#719CC3";
+                    markerid = 99;
+                } else if (notinservice && (service.get(i).equals("not in service"))) {
+                    colour = "#ffffff";
+                    markerid = 60;
+                } else if(others){
+                    markerid =0;
+                }
+                else{
                     continue;
                 }
                 drawMarker(new LatLng(location_lat.get(i), location_long.get(i)), colour,markerid,i, gmap);
                 all++;
-                if (runs <= 2) {
+                if (runs <= 1) {
                     try {
                         bounds = builder.build();
-                        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+                        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 100);
                         gmap.animateCamera(cu);
                     } catch (Exception ignored) {
                     }
                 }
-                debug.setText("Displaying " + all + " busses");
+                debug.setText("Displaying " + all + " buses");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -266,6 +305,7 @@ public class app_maps extends Fragment {
         super.onLowMemory();
         mMapView.onLowMemory();
         if(timer!=null) {
+            System.out.println("stopping timer");
             timer.cancel();
             timer = null;
         }
@@ -275,6 +315,7 @@ public class app_maps extends Fragment {
     public void onPause() {
         super.onPause();
         if(timer!=null) {
+            System.out.println("stopping timer");
             timer.cancel();
             timer = null;
         }
@@ -283,7 +324,11 @@ public class app_maps extends Fragment {
     @Override
     public void onResume() {
         mContext = getContext();
+        progress = new ProgressDialog(getContext());
+        progress.setMessage("Downloading, please wait");
+        progress.show();
         if(timer==null) {
+            System.out.println("starting timer");
             update_map_auto();
         }
         Toast.makeText(getContext(), "updating every 10 seconds", Toast.LENGTH_SHORT).show();
@@ -313,7 +358,7 @@ public class app_maps extends Fragment {
                     public boolean onMarkerClick(Marker marker) {
                         int position = (int)(marker.getTag());
                         try {
-                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.content_frame), "Bus number:" + BusID.get(position) +" Bus service:" + service.get(position) + " heading:" + bearing.get(position) + "\nLast updated at: " + Last_updated.get(position) + " GMT", Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.content_frame), "Bus number:" + BusID.get(position) +" Bus service:" + service.get(position) + " heading:" + bearing.get(position) + "\nLast updated at: " + Last_updated.get(position) + " GMT", Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
                         catch (Exception ignored){
