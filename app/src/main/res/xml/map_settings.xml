@@ -121,13 +121,5 @@
             android:defaultValue="true"
             android:key="pref500"
             android:title="Show 500" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="prefnis"
-            android:title="Show Buses not in service" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="prefothers"
-            android:title="Show others" />
     </PreferenceCategory>
 </PreferenceScreen>

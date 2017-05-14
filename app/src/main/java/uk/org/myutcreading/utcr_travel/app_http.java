@@ -109,7 +109,7 @@ public class app_http extends AsyncTask<String, String, String> {
                         temp_temp[2] = "not in service";
                     }
                     if (temp_temp[6].isEmpty()) {
-                        temp_temp[6] = "N/A";
+                        temp_temp[6] = "0";
                     }
                 }
                 BusID.add(temp_temp[1]);

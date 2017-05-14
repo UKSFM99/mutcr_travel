@@ -78,22 +78,25 @@ public class app_menu extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_maps) {
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame
                     , new app_maps())
                     .addToBackStack("stack")
                     .commit();
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_about) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame
+                            , new app_about())
+                    .addToBackStack("stack")
+                    .commit();
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_update) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame
+                            , new app_update())
+                    .addToBackStack("stack")
+                    .commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

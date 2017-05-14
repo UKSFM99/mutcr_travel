@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -40,6 +41,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -83,6 +86,10 @@ public class app_maps extends Fragment {
             update_map_auto();
             System.out.println("starting timer");
         }
+        Toast.makeText(getContext(), "updating every 10 seconds", Toast.LENGTH_SHORT).show();
+        progress = new ProgressDialog(getContext());
+        progress.setMessage("Downloading, please wait");
+        progress.show();
         myView = inflater.inflate(R.layout.app_maps, container, false);
         mMapView = (MapView) myView.findViewById(map);
         mMapView.onCreate(savedInstanceState);
@@ -108,12 +115,11 @@ public class app_maps extends Fragment {
                 }
 
             }
-        }, 0, 5000);
+        }, 0, 10000);
     }
 
     public int decode_marker(SharedPreferences prefs, GoogleMap gmap) {
         builder = new LatLngBounds.Builder();
-        boolean others = prefs.getBoolean("prefothers", true);
         boolean one = prefs.getBoolean("pref1", true);
         boolean two = prefs.getBoolean("pref2", true);
         boolean three = prefs.getBoolean("pref3", true);
@@ -144,8 +150,6 @@ public class app_maps extends Fragment {
         boolean fiftythree = prefs.getBoolean("pref53", true);
         boolean sixtey = prefs.getBoolean("pref60", true);
         boolean fivehundred = prefs.getBoolean("pref500", true);
-        boolean notinservice = prefs.getBoolean("prefnis", true);
-        marker_ids.clear();
         String line = "";
         int markerid = 0;
         int all = 0;
@@ -244,18 +248,13 @@ public class app_maps extends Fragment {
                 } else if (fivehundred && (service.get(i).equals("500")||service.get(i).equals("500a"))) {
                     colour = "#719CC3";
                     markerid = 99;
-                } else if (notinservice && (service.get(i).equals("not in service"))) {
-                    colour = "#ffffff";
-                    markerid = 60;
-                } else if(others){
-                    markerid =0;
                 }
                 else{
                     continue;
                 }
-                drawMarker(new LatLng(location_lat.get(i), location_long.get(i)), colour,markerid,i, gmap);
+                drawMarker(new LatLng(location_lat.get(i), location_long.get(i)), colour,markerid,i, Float.parseFloat(bearing.get(i)), gmap);
                 all++;
-                if (runs <= 1) {
+                if (runs <= 2) {
                     try {
                         bounds = builder.build();
                         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 100);
@@ -264,6 +263,9 @@ public class app_maps extends Fragment {
                     }
                 }
                 debug.setText("Displaying " + all + " buses");
+                if(all == 0){
+                    Toast.makeText(getContext(),"There are no buses for this route running right now",Toast.LENGTH_LONG).show();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -271,8 +273,7 @@ public class app_maps extends Fragment {
         runs++;
         return 0;
     }
-
-    private void drawMarker(LatLng point, final String colour, int id,int i, GoogleMap gmap) {
+    private void drawMarker(LatLng point, final String colour, int id,int i,float rotation, GoogleMap gmap) {
         Marker temp;
         Bitmap bm;
         if(icons[id] != null){
@@ -285,13 +286,12 @@ public class app_maps extends Fragment {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions
                 .position(point)
-                .title(service.get(i))
                 .icon(BitmapDescriptorFactory.fromBitmap(bm));
         temp = gmap.addMarker(markerOptions);
+        temp.setRotation(rotation);
         temp.setTag(i);
         builder.include(markerOptions.getPosition());
     }
-
     public static Bitmap tintImage(Bitmap bitmap, String color) {
         Paint paint = new Paint();
         paint.setColorFilter(new PorterDuffColorFilter(Color.parseColor(color), PorterDuff.Mode.SRC_IN));
@@ -323,15 +323,11 @@ public class app_maps extends Fragment {
     }
     @Override
     public void onResume() {
-        mContext = getContext();
-        progress = new ProgressDialog(getContext());
-        progress.setMessage("Downloading, please wait");
-        progress.show();
+        runs =0;
         if(timer==null) {
             System.out.println("starting timer");
             update_map_auto();
         }
-        Toast.makeText(getContext(), "updating every 10 seconds", Toast.LENGTH_SHORT).show();
         mMapView.invalidate();
         super.onResume();
         Log.e("EE","found number of entries:"+BusID.size());
@@ -358,7 +354,8 @@ public class app_maps extends Fragment {
                     public boolean onMarkerClick(Marker marker) {
                         int position = (int)(marker.getTag());
                         try {
-                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.content_frame), "Bus number:" + BusID.get(position) +" Bus service:" + service.get(position) + " heading:" + bearing.get(position) + "\nLast updated at: " + Last_updated.get(position) + " GMT", Snackbar.LENGTH_LONG);
+                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.content_frame),
+                                    "Route: "+service.get(position)+"\nLast updated at "+Last_updated.get(position), Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
                         catch (Exception ignored){
