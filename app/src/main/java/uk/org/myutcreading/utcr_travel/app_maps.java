@@ -115,7 +115,7 @@ public class app_maps extends Fragment {
                 }
 
             }
-        }, 0, 10000);
+        }, 0, 5000);
     }
 
     public int decode_marker(SharedPreferences prefs, GoogleMap gmap) {
@@ -254,7 +254,7 @@ public class app_maps extends Fragment {
                 }
                 drawMarker(new LatLng(location_lat.get(i), location_long.get(i)), colour,markerid,i, Float.parseFloat(bearing.get(i)), gmap);
                 all++;
-                if (runs <= 2) {
+                if (runs <= 1) {
                     try {
                         bounds = builder.build();
                         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 100);
@@ -286,6 +286,7 @@ public class app_maps extends Fragment {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions
                 .position(point)
+                .flat(true)
                 .icon(BitmapDescriptorFactory.fromBitmap(bm));
         temp = gmap.addMarker(markerOptions);
         temp.setRotation(rotation);
@@ -355,7 +356,7 @@ public class app_maps extends Fragment {
                         int position = (int)(marker.getTag());
                         try {
                             Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.content_frame),
-                                    "Route: "+service.get(position)+"\nLast updated at "+Last_updated.get(position), Snackbar.LENGTH_LONG);
+                                    "Route: "+service.get(position)+"Bus Number: "+BusID.get(position)+"\nLast updated at "+Last_updated.get(position), Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
                         catch (Exception ignored){
