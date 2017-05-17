@@ -4,6 +4,7 @@ import android.support.design.widget.NavigationView;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,7 +20,6 @@ import static uk.org.myutcreading.utcr_travel.app_maps.timer;
 
 public class app_menu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    public static int fragment;
     public final FragmentManager fragmentManager = getSupportFragmentManager();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +95,12 @@ public class app_menu extends AppCompatActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame
                             , new app_update())
+                    .addToBackStack("stack")
+                    .commit();
+        } else if (id == R.id.nav_debug) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame
+                            , new app_debug())
                     .addToBackStack("stack")
                     .commit();
         }

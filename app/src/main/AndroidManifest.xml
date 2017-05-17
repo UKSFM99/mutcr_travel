@@ -36,9 +36,9 @@
         </activity>
         <activity android:name=".app_perms_screen"
             android:screenOrientation="portrait"/>
-        <activity android:name=".app_alert"
-            android:screenOrientation="portrait"
-            android:showOnLockScreen="true"/>
+        <service android:name=".OverlayService" />
+        <activity android:name=".OverlayActivity"
+            android:label="IMPORTANT NOTICE"/>
         <activity android:name=".map_settings"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
