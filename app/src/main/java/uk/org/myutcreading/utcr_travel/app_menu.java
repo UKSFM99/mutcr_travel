@@ -23,6 +23,8 @@ public class app_menu extends AppCompatActivity
     public final FragmentManager fragmentManager = getSupportFragmentManager();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent i = new Intent(this, RegistrationService.class);
+        startService(i);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

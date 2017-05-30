@@ -20,6 +20,7 @@ public class app_splash extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_splash);
+        getSupportActionBar().hide();
         TextView travel = (TextView) findViewById(R.id.UI_font);
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/SourceSansPro-Light.otf");
         travel.setTypeface(typeface);

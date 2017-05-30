@@ -2,10 +2,14 @@ package uk.org.myutcreading.utcr_travel;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.KeyguardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -24,7 +28,6 @@ public class OverlayActivity extends AppCompatActivity {
     private static boolean firstrun=true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         //set window priority (lets us draw on lock screen)
         Window window = getWindow();
@@ -38,6 +41,9 @@ public class OverlayActivity extends AppCompatActivity {
         //set view
         setContentView(R.layout.activity_alert);
         //replace content with fragment
+        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
+        KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
+        lock.disableKeyguard();
         fragmentManager.beginTransaction()
                 .replace(R.id.content
                         , new alert())
@@ -59,5 +65,24 @@ public class OverlayActivity extends AppCompatActivity {
     //Disable back button presses
     @Override
     public void onBackPressed() {
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        ActivityManager activityManager = (ActivityManager) getApplicationContext()
+                .getSystemService(Context.ACTIVITY_SERVICE);
+
+        activityManager.moveTaskToFront(getTaskId(), 0);
+    }
+    @Override
+    protected void onUserLeaveHint()
+    {
+        Log.d("onUserLeaveHint","Home button pressed");
+        ActivityManager activityManager = (ActivityManager) getApplicationContext()
+                .getSystemService(Context.ACTIVITY_SERVICE);
+
+        activityManager.moveTaskToFront(getTaskId(), 0);
+        super.onUserLeaveHint();
     }
 }

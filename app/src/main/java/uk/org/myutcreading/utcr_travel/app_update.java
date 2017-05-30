@@ -36,7 +36,6 @@ public class app_update extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.app_update, container, false);
-        /*
         final Button button_setting = (Button) myView.findViewById(R.id.html);
         button_setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +44,6 @@ public class app_update extends Fragment {
                 startActivity(browserIntent);
             }
         });
-        */
         return myView;
     }
 }

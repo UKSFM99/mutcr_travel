@@ -9,7 +9,9 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
+import static uk.org.myutcreading.utcr_travel.app_maps.mContext;
 import static uk.org.myutcreading.utcr_travel.app_maps.service;
+import static uk.org.myutcreading.utcr_travel.app_update.context;
 
 /**
  * Created by ashcon on 5/17/17.
@@ -25,6 +27,7 @@ public class OverlayService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        showOverlayActivity(getApplication());
         registerOverlayReceiver();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -49,7 +52,7 @@ public class OverlayService extends Service {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             Log.d(TAG, "[onReceive]" + action);
-            showOverlayActivity(context);
+            //showOverlayActivity(context);
         }
     };
 

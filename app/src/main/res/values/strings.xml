@@ -3,7 +3,7 @@
     <string name="app_version">V0.3</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
+    <string name="gcm_defaultSenderId">191364018682</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_app_map">Map</string>
 </resources>

@@ -17,6 +17,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.graphics.drawable.VectorDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -47,6 +50,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -66,6 +72,8 @@ public class app_maps extends Fragment {
     public static LatLngBounds.Builder builder;
     public static GoogleMap googleMap;
     public static TextView debug;
+    private static float my_location_lat;
+    private static float my_location_long;
     public static boolean completed = false;
     public static ArrayList<String> BusID = new ArrayList<>();
     public static ArrayList<String> service = new ArrayList<>();
@@ -117,43 +125,53 @@ public class app_maps extends Fragment {
             }
         }, 0, 5000);
     }
-
     public int decode_marker(SharedPreferences prefs, GoogleMap gmap) {
+        GPSTracker gps = new GPSTracker(mContext);
         builder = new LatLngBounds.Builder();
-        boolean one = prefs.getBoolean("pref1", true);
-        boolean two = prefs.getBoolean("pref2", true);
-        boolean three = prefs.getBoolean("pref3", true);
+        boolean one = prefs.getBoolean("pref1", false);
+        boolean two = prefs.getBoolean("pref2", false);
+        boolean three = prefs.getBoolean("pref3", false);
         boolean four = prefs.getBoolean("pref4", true);
-        boolean five = prefs.getBoolean("pref5", true);
-        boolean six = prefs.getBoolean("pref6", true);
-        boolean seven = prefs.getBoolean("pref7", true);
-        boolean nine = prefs.getBoolean("pref9", true);
-        boolean eleven = prefs.getBoolean("pref11", true);
-        boolean twelve = prefs.getBoolean("pref12", true);
-        boolean thirteen = prefs.getBoolean("pref13", true);
-        boolean fourteen = prefs.getBoolean("pref14", true);
-        boolean fifteen = prefs.getBoolean("pref15", true);
-        boolean sixteen = prefs.getBoolean("pref16", true);
+        boolean five = prefs.getBoolean("pref5", false);
+        boolean six = prefs.getBoolean("pref6", false);
+        boolean seven = prefs.getBoolean("pref7", false);
+        boolean nine = prefs.getBoolean("pref9", false);
+        boolean eleven = prefs.getBoolean("pref11", false);
+        boolean twelve = prefs.getBoolean("pref12", false);
+        boolean thirteen = prefs.getBoolean("pref13", false);
+        boolean fourteen = prefs.getBoolean("pref14", false);
+        boolean fifteen = prefs.getBoolean("pref15", false);
+        boolean sixteen = prefs.getBoolean("pref16", false);
         boolean seventeen = prefs.getBoolean("pref17", true);
-        boolean nineteen = prefs.getBoolean("pref19", true);
-        boolean twentyone = prefs.getBoolean("pref21", true);
-        boolean twentytwo = prefs.getBoolean("pref22", true);
-        boolean twentythree = prefs.getBoolean("pref23", true);
-        boolean twentyfour = prefs.getBoolean("pref24", true);
-        boolean twentyfive = prefs.getBoolean("pref25", true);
-        boolean twentysix = prefs.getBoolean("pref26", true);
-        boolean twentyseven = prefs.getBoolean("pref27", true);
-        boolean twentyeight = prefs.getBoolean("pref28", true);
-        boolean twentynine = prefs.getBoolean("pref29", true);
-        boolean thirtythree = prefs.getBoolean("pref33", true);
-        boolean fifty = prefs.getBoolean("pref50", true);
-        boolean fiftythree = prefs.getBoolean("pref53", true);
-        boolean sixtey = prefs.getBoolean("pref60", true);
-        boolean fivehundred = prefs.getBoolean("pref500", true);
+        boolean nineteen = prefs.getBoolean("pref19", false);
+        boolean twentyone = prefs.getBoolean("pref21", false);
+        boolean twentytwo = prefs.getBoolean("pref22", false);
+        boolean twentythree = prefs.getBoolean("pref23", false);
+        boolean twentyfour = prefs.getBoolean("pref24", false);
+        boolean twentyfive = prefs.getBoolean("pref25", false);
+        boolean twentysix = prefs.getBoolean("pref26", false);
+        boolean twentyseven = prefs.getBoolean("pref27", false);
+        boolean twentyeight = prefs.getBoolean("pref28", false);
+        boolean twentynine = prefs.getBoolean("pref29", false);
+        boolean thirtythree = prefs.getBoolean("pref33", false);
+        boolean fifty = prefs.getBoolean("pref50", false);
+        boolean fiftythree = prefs.getBoolean("pref53", false);
+        boolean sixtey = prefs.getBoolean("pref60", false);
+        boolean fivehundred = prefs.getBoolean("pref500", false);
         String line = "";
         int markerid = 0;
         int all = 0;
         try {
+            my_location_lat = (float) gps.getLatitude();
+            my_location_long = (float) gps.getLongitude();
+            System.out.println("location: "+my_location_lat + "," + my_location_long);
+        }
+        catch (Exception e){
+            System.out.println("error getting user location");
+        }
+        try {
+            index_bus=0;
+            distance_min=100000;
             for (int i = 0; i < BusID.size(); i++) {
                 String colour;
                 colour = "#ffffff";
@@ -252,6 +270,8 @@ public class app_maps extends Fragment {
                 else{
                     continue;
                 }
+                int busid = Integer.parseInt(BusID.get(i));
+                distFrom(busid,my_location_lat,my_location_long,Float.parseFloat(Double.toString(location_lat.get(i))),Float.parseFloat(Double.toString(location_long.get(i))));
                 drawMarker(new LatLng(location_lat.get(i), location_long.get(i)), colour,markerid,i, Float.parseFloat(bearing.get(i)), gmap);
                 all++;
                 if (runs <= 1) {
@@ -270,8 +290,45 @@ public class app_maps extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        int shortest_bus_number = BusID.indexOf(Integer.toString(index_bus));
+        try {
+            System.out.println("shortest bus ID = " + BusID.get(shortest_bus_number) + " with distance of " + distance_min + " m");
+            draw_route(gmap,shortest_bus_number);
+            debug.append("\nNearest bus= "+service.get(shortest_bus_number)+"at "+distance_min+" m");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         runs++;
         return 0;
+    }
+    public void draw_route(GoogleMap gmap,int index){
+        Polyline route;
+        PolylineOptions options = new PolylineOptions();
+            options.add(new LatLng(my_location_lat,my_location_long));
+            options.add(new LatLng(location_lat.get(index),location_long.get(index)));
+        route = gmap.addPolyline(options);
+    }
+    public static float distance_min =100000;
+    public static int index_bus;
+    public static float distFrom (int index,float lat1, float lng1, float lat2, float lng2)
+    {
+        double earthRadius = 3958.75;
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLng = Math.toRadians(lng2-lng1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLng/2) * Math.sin(dLng/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double dist = earthRadius * c;
+        int meterConversion = 1609;
+        float distance = new Float(dist * meterConversion).floatValue();
+        //modify smallest bus
+        if(distance < distance_min){
+            distance_min = distance;
+            index_bus = index;
+        }
+        return distance;
     }
     private void drawMarker(LatLng point, final String colour, int id,int i,float rotation, GoogleMap gmap) {
         Marker temp;
@@ -285,6 +342,8 @@ public class app_maps extends Fragment {
         }
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions
+                //sets center of bitmap as anchor point
+                .anchor(0.5f,0.5f)
                 .position(point)
                 .flat(true)
                 .icon(BitmapDescriptorFactory.fromBitmap(bm));
